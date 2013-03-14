@@ -2,7 +2,7 @@
 
 namespace Userfriendly\Bundle\SocialUserBundle\Controller;
 
-use Userfriendly\Bundle\SocialUserBundle\Model\UserEmailChangeRequestManager;
+use Userfriendly\Bundle\SocialUserBundle\Model\StorageAgnosticObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -60,7 +60,8 @@ class ProfileController extends Controller
                 }
                 else
                 {
-                    $changeRequest = new UserEmailChangeRequest();
+                    $emailChangeRequestManager = $this->get( 'uf.security.email_change_request_manager' );
+                    $changeRequest = $emailChangeRequestManager->create();
                     $changeRequest->setUser( $user );
                     $token = substr( $this->get( 'fos_user.util.token_generator' )->generateToken(), 0, 12 );
                     $changeRequest->setConfirmationToken( $token );

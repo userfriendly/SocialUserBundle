@@ -1,14 +1,20 @@
 parameters:
 
-    uf_security_emailchangerequest_class:     Userfriendly\Bundle\SocialUserBundle\Entity\UserEmailChangeRequest
-    uf_security_oauth_identity_class:         Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity
-    uf_security_oauth_identity_manager_class: Userfriendly\Bundle\SocialUserBundle\Model\UserIdentityManager
-    uf_security_oauth_user_provider_class:    Userfriendly\Bundle\SocialUserBundle\OAuth\UserProvider
+    uf_security_email_change_request_class:             Userfriendly\Bundle\SocialUserBundle\Entity\UserEmailChangeRequest
+    uf_security_oauth_identity_class:                   Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity
+    uf_security_storage_agnostic_object_manager_class:  Userfriendly\Bundle\SocialUserBundle\Model\StorageAgnosticObjectManager
+    uf_security_oauth_user_provider_class:              Userfriendly\Bundle\SocialUserBundle\OAuth\UserProvider
 
 services:
 
+    uf.security.email_change_request_manager:
+        class: %uf_security_storage_agnostic_object_manager_class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - %uf_security_email_change_request_class%
+
     uf.security.oauth_identity_manager:
-        class: %uf_security_oauth_identity_manager_class%
+        class: %uf_security_storage_agnostic_object_manager_class%
         arguments:
             - '@doctrine.orm.entity_manager'
             - %uf_security_oauth_identity_class%
