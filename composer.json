@@ -1,0 +1,29 @@
+{
+    "name":        "userfriendly/social-user-bundle",
+    "type":        "symfony-bundle",
+    "description": "Symfony 2 bundle for user management and authentication using OAuth and traditional password-based login.",
+    "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect", "yahoo"],
+    "homepage":    "http://github.com/userfriendly/SocialUserBundle",
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "name": "Moritz Kraft",
+            "email": "chamalla.extract@gmail.com"
+        }
+    ],
+
+    "require": {
+        "stof/doctrine-extensions-bundle": ">=1.1.*",,
+        "friendsofsymfony/user-bundle": ">=2.0.*"
+        "hwi/oauth-bundle": ">=0.2.*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Userfriendly\\Bundle\\SocialUserBundle": ""
+        }
+    },
+
+    "target-dir": "Userfriendly/Bundle/SocialUserBundle"
+}
