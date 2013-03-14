@@ -13,7 +13,12 @@
         }
     ],
 
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/userfriendly/UtilityBundle" }
+    ],
+
     "require": {
+        "userfriendly/utility-bundle": "*",
         "stof/doctrine-extensions-bundle": ">=1.1",
         "friendsofsymfony/user-bundle": ">=2.0",
         "hwi/oauth-bundle": ">=0.2"

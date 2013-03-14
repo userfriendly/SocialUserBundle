@@ -1,0 +1,39 @@
+Userfriendly\SocialUserBundle\Entity\UserEmailChangeRequest:
+    type: entity
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        email:
+            type: string
+            length: 255
+        confirmationToken:
+            column: confirmation_token
+            type: string
+            length: 255
+            unique: true
+            nullable: true
+        identifier:
+            type: boolean
+        updatedAt:
+            column: updated_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+        createdAt:
+            column: created_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create
+        manyToOne:
+            user:
+                targetEntity: Userfriendly\SocialUserBundle\Entity\UserInterface
+                inversedBy: emailChangeRequests
+                joinColumn:
+                    name: user_id
+                    referencedColumnName: id
+                cascade: ["persist"]

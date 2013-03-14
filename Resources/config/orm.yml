@@ -1,0 +1,21 @@
+parameters:
+
+    uf_security_emailchangerequest_class:     Userfriendly\Bundle\SocialUserBundle\Entity\UserEmailChangeRequest
+    uf_security_oauth_identity_class:         Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity
+    uf_security_oauth_identity_manager_class: Userfriendly\Bundle\SocialUserBundle\Model\UserIdentityManager
+    uf_security_oauth_user_provider_class:    Userfriendly\Bundle\SocialUserBundle\OAuth\UserProvider
+
+services:
+
+    uf.security.oauth_identity_manager:
+        class: %uf_security_oauth_identity_manager_class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - %uf_security_oauth_identity_class%
+
+    uf.security.oauth_user_provider:
+        class: %uf_security_oauth_user_provider_class%
+        arguments:
+            - '@fos_user.user_manager'
+            - '@uf.security.oauth_identity_manager'
+            - '@event_dispatcher'

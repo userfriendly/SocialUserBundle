@@ -1,0 +1,49 @@
+Userfriendly\SocialUserBundle\Entity\UserIdentity:
+    type: entity
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        type:
+            type: string
+            length: 32
+            unique: true
+        identifier:
+            type: string
+            length: 255
+        accessToken:
+            column: access_token
+            type: string
+            length: 255
+            nullable: true
+        name:
+            type: string
+            length: 255
+            nullable: true
+        email:
+            type: string
+            length: 255
+            nullable: true
+        updatedAt:
+            column: updated_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+        createdAt:
+            column: created_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create
+        manyToOne:
+            user:
+                targetEntity: Userfriendly\SocialUserBundle\Entity\UserInterface
+                inversedBy: identities
+                joinColumn:
+                    name: user_id
+                    referencedColumnName: id
+                cascade: ["persist"]
+                fetch: EAGER

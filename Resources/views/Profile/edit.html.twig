@@ -1,0 +1,248 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+    <div class="container profile">
+
+        {# PAGE HEADER #}
+        <div class="page-header">
+            <h1>Account settings</h1>
+        </div>
+
+        {# ACCOUNT SETTINGS INFORMATION #}
+        <div class="alert alert-info">
+            <i class="icon icon-info-sign"></i>
+            Are you looking to change your data, connect a social login to your
+            account, or enable traditional login with a password? You can do all
+            that here in your account settings.
+        </div>
+
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for key, message in messages %}
+                <div class="alert alert-{{ type }}" style="width: 320px;">
+                    <a href="#" class="close" data-dismiss="alert">&times;</a>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        {# USERNAME FORM #}
+        <form method="POST"
+              action="{{ path( 'fp_profile_save_username', { 'username_slug': user.usernameSlug } ) }}">
+
+            {# FORM HEADER #}
+            <h4>Your user name <small>as it appears on this website</small></h4>
+                
+            <div style="margin-bottom: 20px;">
+
+            {# FORM ELEMENTS #}   
+            {% set checkPath = path( 'fp_profile_username_available', { 'username_slug': user.usernameSlug } ) %}
+            
+                        <input name="username" value="{{ user.username }}" placeholder="Your user name"
+                               type="text" class="input input-xlarge" id="input_username"
+                               data-availability-check-url="{{ checkPath }}" />
+                        <input type="submit" class="btn" value="save" />
+                 
+
+        </form>
+        </div>
+        {# EMAIL FORM #}
+        {% set foo = user.email ? 'Change your' : 'Add an' %}
+        <form method="POST"
+              action="{{ path( 'fp_profile_request_change_email', { 'username_slug': user.usernameSlug } ) }}">
+
+       {# FORM HEADER #}
+        <h4>{{ foo }} email address</h4>
+        <div style="margin-bottom: 20px;">
+
+            {# FORM ELEMENTS #}
+            
+                        <input name="email" value="{{ user.email }}" placeholder="Your email address"
+                               type="text" class="input input-xlarge" id="input_email" />
+                        <input type="submit" class="btn" value="save" />
+        </form>
+        </div>
+        {# PASSWORD FORM #}
+        {% set foo = user.password ? 'Change your' : 'Add a' %}
+        <form method="POST" class="form-horizontal" id="password_form"
+              action="{{ path( 'fp_profile_save_password', { 'username_slug': user.usernameSlug } ) }}">
+
+            {# FORM HEADER #}
+            <h4>{{ foo }} password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h4>
+               
+            <div style="margin-bottom: 20px;">
+            
+
+            {% if user.email %}
+
+                {# FORM ELEMENTS #}
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <label class="control-label">Your new password</label>
+                        <div class="controls">
+                            <input name="password" type="password" id="input_password" class="input" placeholder="Your new password" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <label class="control-label">Confirm password</label>
+                        <div class="controls">
+                            <input name="password_confirm" type="password" id="input_password_confirm" class="input" placeholder="Confirm password" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="offset1 control-group" style="position: relative;">
+                        <label class="checkbox">
+                            <input name="send_details" type="checkbox" checked="checked"> Send account details to my inbox
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="span12 control-group" style="position: relative;">
+                        <div class="controls">
+                            <button type="submit" class="btn" id="password_form_submit">save</button>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+
+                <div style="height: 40px;">
+                    <span class="alert alert-info">
+                        <i class="icon icon-info-sign"></i>
+                        Before you can set a password for your account, you need to
+                        provide an email address.
+                    </span>
+                </div>
+
+            {% endif %}
+
+        </form>
+        </div>
+        {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
+        <h4>Connect {{ foo }} social login</h4>
+
+        <div style="margin-bottom: 20px;">
+            <p>Already connected:</p>
+            {% for identity in user.identities %}
+                <div class="connect-social-login">
+                    <img src="/bundles/fanpollsterapplication/img/social/{{ identity.typeString }}.png" />
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if hwi_oauth_resource_owners()|length > user.identities|length %}
+
+        <div style="margin-bottom: 20px;">
+            <p>Not yet connected:</p>
+            {% for owner in hwi_oauth_resource_owners() %}
+                {% if owner not in user.identitiesAsStrings %}
+                    <div class="connect-social-login">
+                        {% spaceless %}
+                            {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
+                            <a href="{{ hwi_oauth_login_url(owner) }}">
+                                <img src="/bundles/fanpollsterapplication/img/social/{{ owner }}.png" />
+                            </a>
+                        {% endspaceless %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var usernameAvailabilityQueryHandle;
+        $( function()
+        {
+            $( '#password_form_submit' ).click( function()
+            {
+                if ( '' == $( '#input_password' ).val() )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'password cannot be empty'}, $( '#input_password' ) );
+                }
+                else if ( $( '#input_password' ).val() != $( '#input_password_confirm' ).val() )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'passwords must match'}, $( '#input_password_confirm' ) );
+                }
+                else if ( $( '#input_password' ).val().length < 6 )
+                {
+                    addFormControlHint( {cssClass: 'error', text: 'password must be at least 6 characters'}, $( '#input_password' ) );
+                }
+            });
+            $( '#input_email' ).keyup( function()
+            {
+                var target = $( this ).parent();
+                if ( target.parent().find( '.form-control-hint' ).length ) return;
+                var hintData = {cssClass: 'info', text: 'Changing your email address will require confirmation.'};
+                addFormControlHint( hintData, target );
+            });
+            $( '#input_username' ).keyup( function()
+            {
+                var url = $( this ).attr( 'data-availability-check-url' );
+                var username = $( this ).val();
+                var target = $( this ).parent();
+                addFormControlHint( {cssClass: 'loading', text: 'checking...'}, target );
+                if ( usernameAvailabilityQueryHandle && usernameAvailabilityQueryHandle.readyState != 4 )
+                {
+                    usernameAvailabilityQueryHandle.abort();
+                }
+                usernameAvailabilityQueryHandle = $.ajax(
+                {
+                    url: url,
+                    data: { username: username },
+                    dataType: 'json',
+                    success: function( response )
+                    {
+                        $( '.form-control-hint' ).remove();
+                        window.setTimeout( function()
+                        {
+                            addFormControlHint( response, target );
+                        }, 100);
+                    }
+                });
+            });
+            $( '.input' ).blur( function()
+            {
+                $( '.form-control-hint' ).fadeOut( 3000, function() { $( this ).remove() });
+            });
+        });
+        function addFormControlHint( response, target )
+        {
+                $( '.form-control-hint' ).remove();
+            var hint = $( '<span/>' );
+            hint.insertAfter( target );
+            hint.addClass( 'form-control-hint' );
+            hint.addClass( response.cssClass );
+            var icon = $( '<i/>' );
+            hint.append( icon );
+            icon.addClass( 'icon' );
+            var text = $( '<span/>' );
+            hint.append( text );
+            text.html( response.text );
+            switch ( response.cssClass )
+            {
+                case 'loading':
+                    icon.addClass( 'icon-spinner icon-spin' );
+                    break;
+                case 'info':
+                    icon.addClass( 'icon-info-sign' );
+                    break;
+                case 'success':
+                    icon.addClass( 'icon-ok-sign' );
+                    break;
+                case 'error':
+                    icon.addClass( 'icon-exclamation-sign' );
+                    break;
+            }
+        }
+    </script>
+{% endblock %}

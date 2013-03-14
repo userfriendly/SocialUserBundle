@@ -1,0 +1,31 @@
+Userfriendly\SocialUserBundle\Entity\User:
+    type: mappedSuperclass
+    fields:
+        usernameSlug:
+            column: username_slug
+            type: string
+            length: 128
+            unique: true
+            gedmo:
+                slug:
+                    fields:
+                        - username
+        updatedAt:
+            column: updated_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: update
+        createdAt:
+            column: created_at
+            type: datetime
+            gedmo:
+                timestampable:
+                    on: create
+        oneToMany:
+            identities:
+                targetEntity: UserIdentity
+                mappedBy: user
+            emailChangeRequests:
+                targetEntity: emailChangeRequests
+                mappedBy: user
