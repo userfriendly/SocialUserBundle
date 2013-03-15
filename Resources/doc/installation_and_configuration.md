@@ -59,7 +59,7 @@ public function registerBundles()
     $bundles = array(
         // ...
         // Enable the bundle itself
-        new Userfriendly\SocialUserBundle\UserfriendlySocialUserBundle(),
+        new Userfriendly\Bundle\SocialUserBundle\UserfriendlySocialUserBundle(),
         // Enable its dependencies if you aren't already using them
         new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
         new FOS\UserBundle\FOSUserBundle(),
