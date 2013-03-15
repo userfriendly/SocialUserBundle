@@ -52,7 +52,13 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         // write OAuth resource owner configuration to HWI OAuth bundle configuration
         if ( isset( $config['resource_owners'] ))
         {
-            $oAuthConfig = array( 'resource_owners' => $config['resource_owners'] );
+            $resourceOwners = array();
+            foreach ( $config['resource_owners'] as $resourceOwnerName => $resourceOwner )
+            {
+                $resourceOwner['user_response_class'] = 'HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse';
+                $resourceOwners[$resourceOwnerName] = $resourceOwner;
+            }
+            $oAuthConfig = array( 'resource_owners' => $resourceOwners );
             $container->prependExtensionConfig( 'hwi_oauth', $oAuthConfig );
         }
         /////////////////////////////////////////////////////////////
@@ -78,7 +84,7 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
             'properties' => array(),
         );
         $container->prependExtensionConfig( 'hwi_oauth', array( 'fosub' => $fosUbConfig ));
-        // Configure use of Doctrine extensions
+        // configure use of Doctrine extensions
         $docExtConfig = array(
             'default' => array(
                 'timestampable' => true,
@@ -87,6 +93,13 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         );
         $container->prependExtensionConfig(
             'stof_doctrine_extensions', array( $config['db_driver'] => $docExtConfig ) // once we enable more DB drivers, this may need looked at
+        );
+        $container->prependExtensionConfig(
+            'doctrine', array( $config['db_driver'] => array( // once we enable more DB drivers, this may need looked at
+                'resolve_target_entities' => array(
+                    'Userfriendly\Bundle\SocialUserBundle\Model\UserInterface' => $config['user_class'],
+                )
+            ))
         );
     }
 

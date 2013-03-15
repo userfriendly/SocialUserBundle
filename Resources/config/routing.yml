@@ -1,0 +1,11 @@
+uf_fos_user:
+    resource: "@UserfriendlySocialUserBundle/Resources/config/routing/fosuser.yml"
+    prefix:   /
+
+uf_hwi_oauth:
+    resource: "@UserfriendlySocialUserBundle/Resources/config/routing/hwioauth.yml"
+    prefix:   /
+
+uf_profile:
+    resource: "@UserfriendlySocialUserBundle/Resources/config/routing/profile.yml"
+    prefix:   /

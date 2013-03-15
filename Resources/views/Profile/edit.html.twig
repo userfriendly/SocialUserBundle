@@ -28,105 +28,106 @@
 
         {# USERNAME FORM #}
         <form method="POST"
-              action="{{ path( 'fp_profile_save_username', { 'username_slug': user.usernameSlug } ) }}">
+              action="{{ path( 'uf_profile_save_username', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <h4>Your user name <small>as it appears on this website</small></h4>
-                
+
             <div style="margin-bottom: 20px;">
 
-            {# FORM ELEMENTS #}   
-            {% set checkPath = path( 'fp_profile_username_available', { 'username_slug': user.usernameSlug } ) %}
-            
+            {# FORM ELEMENTS #}
+            {% set checkPath = path( 'uf_profile_username_available', { 'username_slug': user.usernameSlug } ) %}
+
                         <input name="username" value="{{ user.username }}" placeholder="Your user name"
                                type="text" class="input input-xlarge" id="input_username"
                                data-availability-check-url="{{ checkPath }}" />
                         <input type="submit" class="btn" value="save" />
-                 
 
+
+            </div>
         </form>
-        </div>
         {# EMAIL FORM #}
         {% set foo = user.email ? 'Change your' : 'Add an' %}
         <form method="POST"
-              action="{{ path( 'fp_profile_request_change_email', { 'username_slug': user.usernameSlug } ) }}">
+              action="{{ path( 'uf_profile_request_change_email', { 'username_slug': user.usernameSlug } ) }}">
 
-       {# FORM HEADER #}
-        <h4>{{ foo }} email address</h4>
-        <div style="margin-bottom: 20px;">
+            {# FORM HEADER #}
+            <h4>{{ foo }} email address</h4>
+            <div style="margin-bottom: 20px;">
 
-            {# FORM ELEMENTS #}
-            
-                        <input name="email" value="{{ user.email }}" placeholder="Your email address"
-                               type="text" class="input input-xlarge" id="input_email" />
-                        <input type="submit" class="btn" value="save" />
+                {# FORM ELEMENTS #}
+                <input name="email" value="{{ user.email }}" placeholder="Your email address"
+                       type="text" class="input input-xlarge" id="input_email" />
+                <input type="submit" class="btn" value="save" />
+            </div>
         </form>
-        </div>
         {# PASSWORD FORM #}
         {% set foo = user.password ? 'Change your' : 'Add a' %}
         <form method="POST" class="form-horizontal" id="password_form"
-              action="{{ path( 'fp_profile_save_password', { 'username_slug': user.usernameSlug } ) }}">
+              action="{{ path( 'uf_profile_save_password', { 'username_slug': user.usernameSlug } ) }}">
 
             {# FORM HEADER #}
             <h4>{{ foo }} password{% if user.password == '' %} <small>to enable traditional login</small>{% endif %}</h4>
-               
+
             <div style="margin-bottom: 20px;">
-            
 
-            {% if user.email %}
 
-                {# FORM ELEMENTS #}
-                <div class="row">
-                    <div class="span12 control-group" style="position: relative;">
-                        <label class="control-label">Your new password</label>
-                        <div class="controls">
-                            <input name="password" type="password" id="input_password" class="input" placeholder="Your new password" />
+                {% if user.email %}
+
+                    {# FORM ELEMENTS #}
+                    <div class="row">
+                        <div class="span12 control-group" style="position: relative;">
+                            <label class="control-label">Your new password</label>
+                            <div class="controls">
+                                <input name="password" type="password" id="input_password" class="input" placeholder="Your new password" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="span12 control-group" style="position: relative;">
-                        <label class="control-label">Confirm password</label>
-                        <div class="controls">
-                            <input name="password_confirm" type="password" id="input_password_confirm" class="input" placeholder="Confirm password" />
+                    <div class="row">
+                        <div class="span12 control-group" style="position: relative;">
+                            <label class="control-label">Confirm password</label>
+                            <div class="controls">
+                                <input name="password_confirm" type="password" id="input_password_confirm" class="input" placeholder="Confirm password" />
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="offset1 control-group" style="position: relative;">
-                        <label class="checkbox">
-                            <input name="send_details" type="checkbox" checked="checked"> Send account details to my inbox
-                        </label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="span12 control-group" style="position: relative;">
-                        <div class="controls">
-                            <button type="submit" class="btn" id="password_form_submit">save</button>
+                    <div class="row">
+                        <div class="offset1 control-group" style="position: relative;">
+                            <label class="checkbox">
+                                <input name="send_details" type="checkbox" checked="checked"> Send account details to my inbox
+                            </label>
                         </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="span12 control-group" style="position: relative;">
+                            <div class="controls">
+                                <button type="submit" class="btn" id="password_form_submit">save</button>
+                            </div>
+                        </div>
+                    </div>
 
-            {% else %}
+                {% else %}
 
-                <div style="height: 40px;">
-                    <span class="alert alert-info">
-                        <i class="icon icon-info-sign"></i>
-                        Before you can set a password for your account, you need to
-                        provide an email address.
-                    </span>
-                </div>
+                    <div style="height: 40px;">
+                        <span class="alert alert-info">
+                            <i class="icon icon-info-sign"></i>
+                            Before you can set a password for your account,
+                            you need to provide an email address.
+                        </span>
+                    </div>
 
-            {% endif %}
+                {% endif %}
 
+            </div>
         </form>
-        </div>
-        {% set foo = user.identities|length > 0 ? 'another' : 'a' %}
+        {% set userIdentities = oauth_identities( user ) %}
+        {% set userIdentitiesAsStrings = oauth_identities( user, true ) %}
+        {% set foo = userIdentities|length > 0 ? 'another' : 'a' %}
         <h4>Connect {{ foo }} social login</h4>
 
         <div style="margin-bottom: 20px;">
             <p>Already connected:</p>
-            {% for identity in user.identities %}
+            {% for identity in userIdentities %}
                 <div class="connect-social-login">
                     <img src="/bundles/fanpollsterapplication/img/social/{{ identity.typeString }}.png" />
                 </div>
@@ -138,11 +139,11 @@
         <div style="margin-bottom: 20px;">
             <p>Not yet connected:</p>
             {% for owner in hwi_oauth_resource_owners() %}
-                {% if owner not in user.identitiesAsStrings %}
+                {% if owner not in userIdentitiesAsStrings %}
                     <div class="connect-social-login">
                         {% spaceless %}
                             {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
-                            <a href="{{ hwi_oauth_login_url(owner) }}">
+                            <a href="{{ hwi_oauth_login_url( owner ) }}">
                                 <img src="/bundles/fanpollsterapplication/img/social/{{ owner }}.png" />
                             </a>
                         {% endspaceless %}

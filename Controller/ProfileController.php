@@ -72,7 +72,7 @@ class ProfileController extends Controller
                     $domain = 'www.' . $this->container->getParameter( 'website_domain' );
                     $url = 'http://' . $domain . str_replace(
                                 '/app_dev.php', '',
-                                $this->generateUrl( 'fp_profile_confirm_change_email', array(
+                                $this->generateUrl( 'uf_profile_confirm_change_email', array(
                                     'confirmation_token' => $token,
                                 )
                             ));
@@ -88,7 +88,7 @@ class ProfileController extends Controller
                     );
                     // Redirect to self
                     return $this->redirect(
-                                $this->generateUrl( 'fp_profile_request_change_email', array(
+                                $this->generateUrl( 'uf_profile_request_change_email', array(
                                     'username_slug' => $user->getUsernameSlug(),
                                 )));
                 }
@@ -130,8 +130,8 @@ class ProfileController extends Controller
             'cssClass' => 'success',
             'text' => 'username is available',
         );
-        $repo = $this->getDoctrine()->getRepository( 'UserfriendlySocialUserBundle:User' );
-        $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
+        $user = $this->get( 'uf.security.oauth_user_provider' )
+                     ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         $currentUser = $this->get( 'security.context' )->getToken()->getUser();
         if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
         {
@@ -157,8 +157,7 @@ class ProfileController extends Controller
 
     private function showAndEdit( Request $request, $action )
     {
-        $user = $this->getDoctrine()
-                     ->getRepository( 'UserfriendlySocialUserBundle:User' )
+        $user = $this->get( 'uf.security.oauth_user_provider' )
                      ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         if ( $user )
         {
@@ -181,8 +180,8 @@ class ProfileController extends Controller
     private function saveUserDataAndGuardAgainstNonPermittedEdit( Request $request, $key )
     {
         // Get the User object in question
-        $repo = $this->getDoctrine()->getRepository( 'UserfriendlySocialUserBundle:User' );
-        $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
+        $user = $this->get( 'uf.security.oauth_user_provider' )
+                     ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         if ( !$user ) throw new NotFoundHttpException();
         // Make sure the current user has editing rights
         $currentUser = $this->get( 'security.context' )->getToken()->getUser();
@@ -225,9 +224,17 @@ class ProfileController extends Controller
         $this->get( 'fos_user.user_manager' )->updateUser( $user );
         $this->getDoctrine()->getEntityManager()->flush();
         return $this->redirect(
-                    $this->generateUrl( 'fp_profile_edit', array(
+                    $this->generateUrl( 'uf_profile_edit', array(
                         'username_slug' => $user->getUsernameSlug()
                     )));
+    }
+
+    protected function getUserRepository()
+    {
+//        $em = $this->getDoctrine()->getEntityManager();
+//        $associationMapping = $em->getClassMetadata('CiscoSystems\AuditBundle\Entity\Audit')
+//                                 ->getAssociationMapping('auditReference');
+//        $targetEntity = $associationMapping['targetEntity'];
     }
 
 }

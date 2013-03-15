@@ -60,6 +60,17 @@ class UserProvider implements OAuthAwareUserProviderInterface
     }
 
     /**
+     *
+     * @param string $slug
+     * @return \Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
+     */
+    public function findOneByUsernameSlug( $slug )
+    {
+        $criteria = array( 'usernameSlug' => $slug );
+        return $this->userManager->findUserBy( $criteria );
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function loadUserByOAuthUserResponse( UserResponseInterface $response )

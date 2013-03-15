@@ -1,0 +1,10 @@
+parameters:
+    uf_twig_social_user_extension_class: Userfriendly\Bundle\SocialUserBundle\Twig\Extension\SocialUserExtension
+
+services:
+    uf.twig.social_user_extension:
+        class: %uf_twig_social_user_extension_class%
+        arguments:
+            - '@uf.security.oauth_identity_manager'
+        tags:
+            - { name: twig.extension }
