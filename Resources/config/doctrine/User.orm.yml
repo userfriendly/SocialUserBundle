@@ -1,4 +1,4 @@
-Userfriendly\SocialUserBundle\Entity\User:
+Userfriendly\Bundle\SocialUserBundle\Entity\User:
     type: mappedSuperclass
     fields:
         usernameSlug:
@@ -22,10 +22,17 @@ Userfriendly\SocialUserBundle\Entity\User:
             gedmo:
                 timestampable:
                     on: create
-        oneToMany:
-            identities:
-                targetEntity: UserIdentity
-                mappedBy: user
-            emailChangeRequests:
-                targetEntity: emailChangeRequests
-                mappedBy: user
+##
+## It is illegal to put an inverse side one-to-many or many-to-many association on mapped superclass:
+##
+#    oneToMany:
+#        identities:
+#            targetEntity: UserIdentity
+#            mappedBy: user
+#        emailChangeRequests:
+#            targetEntity: UserEmailChangeRequest
+#            mappedBy: user
+#
+##
+## Ah well. Too bad.
+##

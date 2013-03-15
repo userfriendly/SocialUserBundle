@@ -1,5 +1,6 @@
-Userfriendly\SocialUserBundle\Entity\UserEmailChangeRequest:
+Userfriendly\Bundle\SocialUserBundle\Entity\UserEmailChangeRequest:
     type: entity
+    table: user__emailchangerequest
     id:
         id:
             type: integer
@@ -15,7 +16,7 @@ Userfriendly\SocialUserBundle\Entity\UserEmailChangeRequest:
             length: 255
             unique: true
             nullable: true
-        identifier:
+        confirmed:
             type: boolean
         updatedAt:
             column: updated_at
@@ -29,11 +30,11 @@ Userfriendly\SocialUserBundle\Entity\UserEmailChangeRequest:
             gedmo:
                 timestampable:
                     on: create
-        manyToOne:
-            user:
-                targetEntity: Userfriendly\SocialUserBundle\Entity\UserInterface
-                inversedBy: emailChangeRequests
-                joinColumn:
-                    name: user_id
-                    referencedColumnName: id
-                cascade: ["persist"]
+    manyToOne:
+        user:
+            targetEntity: Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
+            inversedBy: emailChangeRequests
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+            cascade: ["persist"]

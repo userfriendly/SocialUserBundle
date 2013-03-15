@@ -7,14 +7,14 @@ namespace Userfriendly\Bundle\SocialUserBundle\Model;
  */
 abstract class UserIdentity
 {
-//    const TYPE_GOOGLE   = "google";
-//    const TYPE_FACEBOOK = "facebook";
-//    const TYPE_YAHOO    = "yahoo";
-//    const TYPE_TWITTER  = "twitter";
-    const TYPE_GOOGLE   = 1;
-    const TYPE_FACEBOOK = 2;
-    const TYPE_YAHOO    = 3;
-    const TYPE_TWITTER  = 4;
+    const TYPE_GOOGLE   = "google";
+    const TYPE_FACEBOOK = "facebook";
+    const TYPE_YAHOO    = "yahoo";
+    const TYPE_TWITTER  = "twitter";
+//    const TYPE_GOOGLE   = 1;
+//    const TYPE_FACEBOOK = 2;
+//    const TYPE_YAHOO    = 3;
+//    const TYPE_TWITTER  = 4;
 
     /**
      *

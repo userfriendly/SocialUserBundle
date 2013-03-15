@@ -1,5 +1,6 @@
-Userfriendly\SocialUserBundle\Entity\UserIdentity:
+Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity:
     type: entity
+    table: user__identity
     id:
         id:
             type: integer
@@ -38,12 +39,11 @@ Userfriendly\SocialUserBundle\Entity\UserIdentity:
             gedmo:
                 timestampable:
                     on: create
-        manyToOne:
-            user:
-                targetEntity: Userfriendly\SocialUserBundle\Entity\UserInterface
-                inversedBy: identities
-                joinColumn:
-                    name: user_id
-                    referencedColumnName: id
-                cascade: ["persist"]
-                fetch: EAGER
+    manyToOne:
+        user:
+            targetEntity: Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
+            joinColumn:
+                name: user_id
+                referencedColumnName: id
+            cascade: ["persist"]
+            fetch: EAGER
