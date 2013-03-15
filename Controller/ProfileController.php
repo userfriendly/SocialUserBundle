@@ -2,7 +2,6 @@
 
 namespace Userfriendly\Bundle\SocialUserBundle\Controller;
 
-use Userfriendly\Bundle\SocialUserBundle\Model\StorageAgnosticObjectManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -227,14 +226,6 @@ class ProfileController extends Controller
                     $this->generateUrl( 'uf_profile_edit', array(
                         'username_slug' => $user->getUsernameSlug()
                     )));
-    }
-
-    protected function getUserRepository()
-    {
-//        $em = $this->getDoctrine()->getEntityManager();
-//        $associationMapping = $em->getClassMetadata('CiscoSystems\AuditBundle\Entity\Audit')
-//                                 ->getAssociationMapping('auditReference');
-//        $targetEntity = $associationMapping['targetEntity'];
     }
 
 }
