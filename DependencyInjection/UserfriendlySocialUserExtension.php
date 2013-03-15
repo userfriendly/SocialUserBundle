@@ -78,6 +78,16 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
             'properties' => array(),
         );
         $container->prependExtensionConfig( 'hwi_oauth', array( 'fosub' => $fosUbConfig ));
+        // Configure use of Doctrine extensions
+        $docExtConfig = array(
+            'default' => array(
+                'timestampable' => true,
+                'sluggable' => true,
+            ),
+        );
+        $container->prependExtensionConfig(
+            'stof_doctrine_extensions', array( $config['db_driver'] => $docExtConfig ) // once we enable more DB drivers, this may need looked at
+        );
     }
 
     public function load( array $configs, ContainerBuilder $container )
