@@ -129,7 +129,7 @@
             <p>Already connected:</p>
             {% for identity in userIdentities %}
                 <div class="connect-social-login">
-                    <img src="/bundles/fanpollsterapplication/img/social/{{ identity.typeString }}.png" />
+                    <img src="/bundles/userfriendlysocialuser/img/{{ identity.typeString }}.png" />
                 </div>
             {% endfor %}
         </div>
@@ -144,7 +144,7 @@
                         {% spaceless %}
                             {#<a href="{{ path( 'hwi_oauth_connect_service', { 'service': owner }) }}">#}
                             <a href="{{ hwi_oauth_login_url( owner ) }}">
-                                <img src="/bundles/fanpollsterapplication/img/social/{{ owner }}.png" />
+                                <img src="/bundles/userfriendlysocialuser/img/{{ owner }}.png" />
                             </a>
                         {% endspaceless %}
                     </div>
