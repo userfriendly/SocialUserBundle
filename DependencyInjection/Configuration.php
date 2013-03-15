@@ -55,15 +55,9 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode( 'firewall_name' )
-                    ->cannotBeOverwritten()
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                ->end()
-//                ->scalarNode( 'firewall_name' )->isRequired()->cannotBeEmpty()->end()
-//                ->scalarNode( 'identity_class' )->isRequired()->cannotBeEmpty()->end()
-//                ->scalarNode( 'user_class' )->isRequired()->cannotBeEmpty()->end()
-//                ->scalarNode( 'group_class' )->end()
+                ->scalarNode( 'firewall_name' )->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode( 'user_class' )->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode( 'group_class' )->end()
             ->end();
 
         $this->foo($rootNode);

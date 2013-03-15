@@ -33,7 +33,6 @@ Userfriendly\Bundle\SocialUserBundle\Entity\UserEmailChangeRequest:
     manyToOne:
         user:
             targetEntity: Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
-            inversedBy: emailChangeRequests
             joinColumn:
                 name: user_id
                 referencedColumnName: id
