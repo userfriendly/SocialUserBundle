@@ -29,7 +29,7 @@ The current version seems to work reasonably well with Symfony 2.2, though.
 Documentation
 -------------
 
-[Read the Documentation for master](https://github.com/WrittenGames/OpenIdUserBundle/blob/master/Resources/doc/index.md)
+[Read the Documentation for master](https://github.com/WrittenGames/SocialUserBundle/blob/master/Resources/doc/index.md)
 
 All installation and configuration instructions are located
 [here](https://github.com/userfriendly/SocialUserBundle/blob/master/Resources/doc/installation_and_configuration.md).
