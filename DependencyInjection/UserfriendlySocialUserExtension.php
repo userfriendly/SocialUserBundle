@@ -55,7 +55,7 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
             $resourceOwners = array();
             foreach ( $config['resource_owners'] as $resourceOwnerName => $resourceOwner )
             {
-                $resourceOwner['user_response_class'] = 'HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse';
+                $resourceOwner['user_response_class'] = 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse';
                 $resourceOwners[$resourceOwnerName] = $resourceOwner;
             }
             $oAuthConfig = array( 'resource_owners' => $resourceOwners );

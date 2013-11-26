@@ -29,11 +29,11 @@ class UserProvider implements OAuthAwareUserProviderInterface
      * @param StorageAgnosticObjectManager   $identityManager  Identity manager
      * @param ContainerAwareEventDispatcher  $eventDispatcher  Event dispatcher
      */
-    public function __construct( UserManagerInterface $userManager, StorageAgnosticObjectManager $identityManager, ContainerAwareEventDispatcher $eventDispatcher )
+    public function __construct( UserManagerInterface $userManager, StorageAgnosticObjectManager $identityManager /*, ContainerAwareEventDispatcher $eventDispatcher */ )
     {
         $this->userManager = $userManager;
         $this->identityManager = $identityManager;
-        $this->eventDispatcher = $eventDispatcher;
+//        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -44,11 +44,11 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $existingIdentity = $this->getExistingIdentity( $response );
         if ( $existingIdentity )
         {
-            $previousUser = $existingIdentity->getUser();
-            $event = new UserAccountMergedEvent( 'User accounts merged' );
-            $event->setMergedUser( $previousUser );
-            $event->setMergingUser( $user );
-            $this->eventDispatcher->dispatch( UserAccountMergedEvent::ID, $event );
+//            $previousUser = $existingIdentity->getUser();
+//            $event = new UserAccountMergedEvent( 'User accounts merged' );
+//            $event->setMergedUser( $previousUser );
+//            $event->setMergingUser( $user );
+//            $this->eventDispatcher->dispatch( UserAccountMergedEvent::ID, $event );
             $existingIdentity->setUser( $user );
             $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
             $this->identityManager->update( $existingIdentity );

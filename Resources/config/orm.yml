@@ -24,4 +24,3 @@ services:
         arguments:
             - '@fos_user.user_manager'
             - '@uf.security.oauth_identity_manager'
-            - '@event_dispatcher'

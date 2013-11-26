@@ -23,7 +23,7 @@
         "userfriendly/utility-bundle": "*",
         "stof/doctrine-extensions-bundle": ">=1.1",
         "friendsofsymfony/user-bundle": ">=2.0",
-        "hwi/oauth-bundle": ">=0.2"
+        "hwi/oauth-bundle": ">=0.3"
     },
 
     "autoload": {
