@@ -122,14 +122,13 @@
         </form>
         {% set userIdentities = oauth_identities( user ) %}
         {% set userIdentitiesAsStrings = oauth_identities( user, true ) %}
-        {% set foo = userIdentities|length > 0 ? 'another' : 'a' %}
-        <h4>Connect {{ foo }} social login</h4>
+        <h4>Connect {{ userIdentities|length > 0 ? 'another' : 'a' }} social login</h4>
 
         <div style="margin-bottom: 20px;">
             <p>Already connected:</p>
             {% for identity in userIdentities %}
                 <div class="connect-social-login">
-                    <img src="/bundles/userfriendlysocialuser/img/{{ identity.typeString }}.png" />
+                    <img src="/bundles/userfriendlysocialuser/img/{{ identity.type }}.png" />
                 </div>
             {% endfor %}
         </div>

@@ -62,7 +62,7 @@ class StorageAgnosticObjectManager
      * @return mixed
      * @throws \InvalidArgumentException
      */
-    public function findBy( array $criteria = array() )
+    public function findOneBy( array $criteria = array() )
     {
         $pos = strrpos( $this->class, '\\' );
         if ( !$pos )
@@ -73,5 +73,25 @@ class StorageAgnosticObjectManager
         return $this->objectManager
                     ->getRepository( 'UserfriendlySocialUserBundle:' . $className )
                     ->findOneBy( $criteria );
+    }
+
+    /**
+     * Retrieve an object
+     *
+     * @param array $criteria
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function findBy( array $criteria = array() )
+    {
+        $pos = strrpos( $this->class, '\\' );
+        if ( !$pos )
+        {
+            throw new \InvalidArgumentException( __FILE__ . ' line ' . __LINE__ . ': supplied class name is invalid.' );
+        }
+        $className = substr( $this->class, $pos + 1 );
+        return $this->objectManager
+                    ->getRepository( 'UserfriendlySocialUserBundle:' . $className )
+                    ->findBy( $criteria );
     }
 }
