@@ -169,7 +169,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
         $accessToken = $response->getAccessToken();
         switch ( $response->getResourceOwner()->getName() )
         {
-            case UserIdentity::getReadableType( UserIdentity::TYPE_TWITTER ):
+            //case UserIdentity::getReadableType( UserIdentity::TYPE_TWITTER ):
             case UserIdentity::getReadableType( UserIdentity::TYPE_YAHOO ):
                 return $accessToken['oauth_token'];
             default:
