@@ -193,13 +193,13 @@ class UserProvider implements OAuthAwareUserProviderInterface
                 $responseArray = $response->getResponse();
                 $name = trim( $responseArray['profile']['givenName'] . ' ' . $responseArray['profile']['familyName'] );
                 return $name;
-            case UserIdentity::getReadableType( UserIdentity::TYPE_TWITTER ):
-                $responseArray = $response->getResponse();
-                echo '<pre>';
-                print_r( $response );
-                echo '</pre>';
-                die(); exit;
-                return 'twit';
+//            case UserIdentity::getReadableType( UserIdentity::TYPE_TWITTER ):
+//                $responseArray = $response->getResponse();
+//                echo '<pre>';
+//                print_r( $response );
+//                echo '</pre>';
+//                die(); exit;
+//                return 'twit';
             default:
                 return $response->getRealName();
         }
