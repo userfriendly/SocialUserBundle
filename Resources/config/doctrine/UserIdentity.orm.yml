@@ -10,7 +10,6 @@ Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity:
         type:
             type: string
             length: 32
-            unique: true
         identifier:
             type: string
             length: 255
