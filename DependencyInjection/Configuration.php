@@ -58,14 +58,16 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode( 'firewall_name' )->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode( 'user_class' )->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode( 'group_class' )->end()
+                ->scalarNode( 'mailsubject_emailchange' )->end()
+                ->scalarNode( 'mailsubject_accountdetails' )->end()
             ->end();
 
-        $this->foo($rootNode);
+        $this->defineResourceOwnerConfig( $rootNode );
 
         return $treeBuilder;
     }
 
-    private function foo( ArrayNodeDefinition $node )
+    private function defineResourceOwnerConfig( ArrayNodeDefinition $node )
     {
         $node
             ->children()

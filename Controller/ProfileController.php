@@ -68,7 +68,7 @@ class ProfileController extends Controller
                     $em->persist( $changeRequest );
                     $em->flush();
                     // send confirmation email to new address
-                    $domain = 'www.' . $this->container->getParameter( 'website_domain' );
+                    $domain = $request->getHost();
                     $url = 'http://' . $domain . str_replace(
                                 '/app_dev.php', '',
                                 $this->generateUrl( 'uf_profile_confirm_change_email', array(
@@ -82,12 +82,11 @@ class ProfileController extends Controller
                                 'email' => $email,
                                 'url' => $url,
                             ));
-                    $from  = $this->container->getParameter( 'uf_sub_system_email_username' );
-                    $from .= '@' . $this->container->getParameter( 'uf_sub_website_domain' );
+                    $from = 'no-reply@' . $domain;
                     $message = Swift_Message::newInstance()
                                 ->setContentType( 'text/html; charset=UTF-8' )
                                 ->setSubject( $this->container->getParameter( 'uf_sub_mail_subject_emailchange' ))
-                                ->setFrom( $from )
+                                ->setFromsaveUserDataAndGuardAgainstNonPermittedEdit( $from )
                                 ->setReplyTo( $from )
                                 ->setTo( $email )
                                 ->setBody( $body );
@@ -207,22 +206,28 @@ class ProfileController extends Controller
                 if ( $request->get( 'send_details' ))
                 {
                     // Send email with account details
-                    $domain = 'www.' . $this->container->getParameter( 'website_domain' );
+                    $domain = $request->getHost();
                     $url = 'http://' . $domain . str_replace(
                                 '/app_dev.php', '',
                                 $this->generateUrl( 'fos_user_security_login' )
                             );
-                    $this->get( 'fp.email' )->send(
-                        $user->getEmailCanonical(),
-                        $this->container->getParameter( 'mail_subject_emailchange' ),
-                        $this->renderView( 'UserfriendlySocialUserBundle:Email:emailchangerequest.html.twig', array(
-                            'name' => $user->getUsername(),
-                            'website' => $domain,
-                            'email' => $user->getEmailCanonical(),
-                            'password' => $password,
-                            'url' => $url,
-                        ))
-                    );
+                    $mailer = $this->get( '@mailer' );
+                    $body = $this->renderView( 'UserfriendlySocialUserBundle:Email:accountdetails.html.twig', array(
+                                'name' => $user->getUsername(),
+                                'website' => $domain,
+                                'email' => $user->getEmailCanonical(),
+                                'url' => $url,
+                                'password' => $password,
+                            ));
+                    $from = 'no-reply@' . $domain;
+                    $message = Swift_Message::newInstance()
+                                ->setContentType( 'text/html; charset=UTF-8' )
+                                ->setSubject( $this->container->getParameter( 'uf_sub_mail_subject_accountdetails' ))
+                                ->setFromsaveUserDataAndGuardAgainstNonPermittedEdit( $from )
+                                ->setReplyTo( $from )
+                                ->setTo( $user->getEmailCanonical() )
+                                ->setBody( $body );
+                    $mailer->send( $message );
                 }
                 $this->get( 'session' )->getFlashBag()->add( 'success', 'Password was successfully set.' );
                 break;

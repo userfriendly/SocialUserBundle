@@ -112,7 +112,10 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         $loader = new YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ));
         $loader->load( 'services.yml' );
         $loader->load( sprintf('%s.yml', $config['db_driver'] ));
-        // Set parameters, e.g.
-//        $container->setParameter( 'foo, $config['foo'] );
+        // Set parameters
+        $container->setParameter( 'uf_sub_mail_subject_emailchange', isset( $config['mailsubject_emailchange'] )
+                ?: 'Change of email address requested' );
+        $container->setParameter( 'uf_sub_mail_subject_accountdetails', isset( $config['mailsubject_accountdetails'] )
+                ?: 'Your account details' );
     }
 }

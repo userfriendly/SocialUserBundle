@@ -190,7 +190,7 @@ security:
 
 ### Step 5: Configure the UserfriendlySocialUserBundle
 
-Now that you have properly configured your application's `security.yml` to work
+Now that you have modified your application's `security.yml` to work
 with the UserfriendlySocialUserBundle, the next step is to configure it. The
 UserfriendlySocialUserBundle sets sensible defaults for its dependencies,
 so you will only need to add a few things in your own config.yml - the following
