@@ -75,16 +75,23 @@ class ProfileController extends Controller
                                     'confirmation_token' => $token,
                                 )
                             ));
-                    $this->get( 'fp.email' )->send(
-                        $canonicalEmail,
-                        $this->container->getParameter( 'mail_subject_emailchange' ),
-                        $this->renderView( 'UserfriendlySocialUserBundle:Email:emailchangerequest.html.twig', array(
-                            'name' => $user->getUsername(),
-                            'website' => $domain,
-                            'email' => $email,
-                            'url' => $url,
-                        ))
-                    );
+                    $mailer = $this->get( '@mailer' );
+                    $body = $this->renderView( 'UserfriendlySocialUserBundle:Email:emailchangerequest.html.twig', array(
+                                'name' => $user->getUsername(),
+                                'website' => $domain,
+                                'email' => $email,
+                                'url' => $url,
+                            ));
+                    $from  = $this->container->getParameter( 'uf_sub_system_email_username' );
+                    $from .= '@' . $this->container->getParameter( 'uf_sub_website_domain' );
+                    $message = Swift_Message::newInstance()
+                                ->setContentType( 'text/html; charset=UTF-8' )
+                                ->setSubject( $this->container->getParameter( 'uf_sub_mail_subject_emailchange' ))
+                                ->setFrom( $from )
+                                ->setReplyTo( $from )
+                                ->setTo( $email )
+                                ->setBody( $body );
+                    $mailer->send( $message );
                     // Redirect to self
                     return $this->redirect(
                                 $this->generateUrl( 'uf_profile_request_change_email', array(
