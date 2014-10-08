@@ -13,13 +13,9 @@
         }
     ],
 
-    "repositories": [
-        { "type": "vcs", "url": "https://github.com/userfriendly/UtilityBundle" }
-    ],
-
     "require": {
         "php": ">=5.3.3",
-        "symfony/framework-bundle": ">=2.2.1",
+        "symfony/framework-bundle": ">=2.4",
         "stof/doctrine-extensions-bundle": ">=1.1",
         "friendsofsymfony/user-bundle": "2.0.*@dev",
         "hwi/oauth-bundle": ">=0.3"
