@@ -20,7 +20,6 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/framework-bundle": ">=2.2.1",
-        "userfriendly/utility-bundle": "*",
         "stof/doctrine-extensions-bundle": ">=1.1",
         "friendsofsymfony/user-bundle": ">=2.0",
         "hwi/oauth-bundle": ">=0.3"
