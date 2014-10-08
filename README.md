@@ -20,7 +20,7 @@ with the standard fields, and optionally ties into the group feature of the FOSU
 **Note:**
 
 > This bundle is *not* developed in sync with Symfony's repository.
-The current version seems to work reasonably well with Symfony 2.2, though.
+The current version seems to work reasonably well with Symfony 2.4, though.
 
 Documentation
 -------------
