@@ -21,7 +21,7 @@
         "php": ">=5.3.3",
         "symfony/framework-bundle": ">=2.2.1",
         "stof/doctrine-extensions-bundle": ">=1.1",
-        "friendsofsymfony/user-bundle": "dev-master",
+        "friendsofsymfony/user-bundle": "2.0.*@dev",
         "hwi/oauth-bundle": ">=0.3"
     },
 
