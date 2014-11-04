@@ -117,5 +117,7 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
                 ?: 'Change of email address requested' );
         $container->setParameter( 'uf_sub_mail_subject_accountdetails', isset( $config['mailsubject_accountdetails'] )
                 ?: 'Your account details' );
+        $container->setParameter( 'uf_firewall_name', isset( $config['firewall_name'] )
+                ?: 'main' );
     }
 }

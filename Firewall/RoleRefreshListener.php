@@ -2,8 +2,6 @@
 
 namespace Userfriendly\Bundle\SocialUserBundle\Firewall;
 
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\Security\Http\Firewall\ListenerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
@@ -13,16 +11,19 @@ use Userfriendly\Bundle\SocialUserBundle\Model\UserInterface;
 class RoleRefreshListener implements ListenerInterface
 {
     protected $securityContext;
+    protected $firewallName;
 
-    public function __construct( SecurityContextInterface $securityContext )
+    public function __construct( SecurityContextInterface $securityContext, $firewallName )
     {
         $this->securityContext = $securityContext;
+        $this->firewallName = $firewallName;
     }
 
     public function handle( GetResponseEvent $event )
     {
         if ( !$event->isMasterRequest() ) return;
         $token = $this->securityContext->getToken();
+        if ( !$token ) return;
         $user = $token->getUser();
         if ( $user instanceof UserInterface )
         {
@@ -36,7 +37,7 @@ class RoleRefreshListener implements ListenerInterface
 
     protected function replaceToken( UserInterface $user )
     {
-        $token = new UsernamePasswordToken( $user, null, 'main', $user->getRoles() );
+        $token = new UsernamePasswordToken( $user, null, $this->firewallName, $user->getRoles() );
         $this->securityContext->setToken( $token );
     }
 }
