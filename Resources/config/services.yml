@@ -1,10 +1,17 @@
 parameters:
     uf_twig_social_user_extension_class: Userfriendly\Bundle\SocialUserBundle\Twig\Extension\SocialUserExtension
+    uf_security_role_refresh_listener_class: Userfriendly\Bundle\SocialUserBundle\Firewall\RoleRefreshListener
 
 services:
     uf.twig.social_user_extension:
-        class: %uf_twig_social_user_extension_class%
+        class: '%uf_twig_social_user_extension_class%'
         arguments:
             - '@uf.security.oauth_identity_manager'
         tags:
             - { name: twig.extension }
+    uf.security.role_refresh_listener:
+        class: '%uf_security_role_refresh_listener_class%'
+        arguments:
+            - '@security.context'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: handle }
