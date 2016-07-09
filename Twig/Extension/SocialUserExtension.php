@@ -3,7 +3,7 @@
 namespace Userfriendly\Bundle\SocialUserBundle\Twig\Extension;
 
 use Twig_Extension;
-use Twig_Function_Method;
+use Twig_SimpleFunction;
 use Userfriendly\Bundle\SocialUserBundle\Model\StorageAgnosticObjectManager;
 
 class SocialUserExtension extends Twig_Extension
@@ -23,8 +23,7 @@ class SocialUserExtension extends Twig_Extension
     public function getFunctions()
     {
         return array(
-            'oauth_identities' => new Twig_Function_Method( $this, 'getIdentitiesFor' ),
-            //'foo' => new Twig_Function_Method( $this, 'foo', array( 'is_safe' => array( 'html' ))),
+            new Twig_SimpleFunction( 'oauth_identities', array( $this, 'getIdentitiesFor' )),
         );
     }
 

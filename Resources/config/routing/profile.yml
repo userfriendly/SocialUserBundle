@@ -1,35 +1,35 @@
 
 uf_profile_show:
-    pattern:  /user/{username_slug}
+    path:  /user/{username_slug}
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:show
 
 uf_profile_edit:
-    pattern:  /user/{username_slug}/edit
+    path:  /user/{username_slug}/edit
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:edit
 
 uf_profile_username_available:
-    pattern:  /user/{username_slug}/username-available
+    path:  /user/{username_slug}/username-available
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:usernameAvailable
 
 uf_profile_save_username:
-    pattern:  /user/{username_slug}/change-username
+    path:  /user/{username_slug}/change-username
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:saveUsername
 
 uf_profile_save_password:
-    pattern:  /user/{username_slug}/change-password
+    path:  /user/{username_slug}/change-password
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:savePassword
 
 uf_profile_request_change_email:
-    pattern:  /user/{username_slug}/change-email
+    path:  /user/{username_slug}/change-email
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:requestChangeEmail
 
 uf_profile_confirm_change_email:
-    pattern:  /confirm/change-email/{confirmation_token}
+    path:  /confirm/change-email/{confirmation_token}
     defaults:
         _controller: UserfriendlySocialUserBundle:Profile:confirmChangeEmail

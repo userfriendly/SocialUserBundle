@@ -13,9 +13,9 @@ class RoleRefreshListener implements ListenerInterface
     protected $securityTokenStorage;
     protected $firewallName;
 
-    public function __construct( TokenStorageInterface $securityContext, $firewallName )
+    public function __construct( TokenStorageInterface $securityTokenStorage, $firewallName )
     {
-        $this->securityContext = $securityContext;
+        $this->securityTokenStorage = $securityTokenStorage;
         $this->firewallName = $firewallName;
     }
 
