@@ -18,7 +18,7 @@
         "symfony/framework-bundle": ">=3.0",
         "stof/doctrine-extensions-bundle": ">=1.2",
         "friendsofsymfony/user-bundle": "2.0.*@dev",
-        "hwi/oauth-bundle": "0.5@dev"
+        "hwi/oauth-bundle": "dev-master"
     },
 
     "suggest": {
