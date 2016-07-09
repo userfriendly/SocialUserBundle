@@ -31,9 +31,8 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         // Pass mandatory configuration on to required bundles. //
         //////////////////////////////////////////////////////////
         // write firewall name to FOS User bundle and HWI OAuth bundle configurations
-        $firewallConfig = array( 'firewall_name' => $config['firewall_name'] );
-        $container->prependExtensionConfig( 'fos_user', $firewallConfig );
-        $container->prependExtensionConfig( 'hwi_oauth', $firewallConfig );
+        $container->prependExtensionConfig( 'fos_user', array( 'firewall_name' => $config['firewall_name'] ));
+        $container->prependExtensionConfig( 'hwi_oauth', array( 'firewall_names' => array( $config['firewall_name'] )));
         // write DB driver to FOS User bundle configuration
         $dbDriverConfig = array( 'db_driver' => $config['db_driver'] );
         $container->prependExtensionConfig( 'fos_user', $dbDriverConfig );

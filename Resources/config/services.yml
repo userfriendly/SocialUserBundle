@@ -12,7 +12,7 @@ services:
     uf.security.role_refresh_listener:
         class: '%uf_security_role_refresh_listener_class%'
         arguments:
-            - '@security.context'
+            - '@security.token_storage'
             - '%uf_firewall_name%'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: handle }

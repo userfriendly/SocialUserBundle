@@ -3,7 +3,8 @@ Installation and configuration
 
 ## Prerequisites
 
-This version of the bundle requires Symfony 2.2 or higher.
+The master version of the bundle requires Symfony 3.1 or higher.
+For Symfony 2.4 or higher, use the sf2.4 branch.
 
 ## Installation
 
@@ -157,7 +158,7 @@ security:
             pattern: ^/
             form_login:
                 provider: fos_userbundle
-                csrf_provider: form.csrf_provider
+                #csrf_provider: form.csrf_provider # this needs to be moved
                 login_path: /login
                 check_path: /login_check
                 default_target_path: /
@@ -207,13 +208,13 @@ userfriendly_social_user:
     resource_owners:
         facebook:
             type:                facebook
-            client_id:           %facebook_client_id%
-            client_secret:       %facebook_client_secret%
+            client_id:           "%facebook_client_id%"
+            client_secret:       "%facebook_client_secret%"
             scope:               "email"
         twitter:
             type:                twitter
-            client_id:           %twitter_client_id%
-            client_secret:       %twitter_client_secret%
+            client_id:           "%twitter_client_id%"
+            client_secret:       "%twitter_client_secret%"
 
 ```
 
@@ -279,7 +280,7 @@ database schema.
 For Doctrine ORM run the following command.
 
 ``` bash
-$ php app/console doctrine:schema:update --force
+$ php bin/console doctrine:schema:update --force
 ```
 
 ### Next Steps
