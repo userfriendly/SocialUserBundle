@@ -19,8 +19,8 @@ with the standard fields, and optionally ties into the group feature of the FOSU
 
 **Note:**
 
-> This bundle is *not* developed in sync with Symfony's repository.
-The current version seems to work reasonably well with Symfony 2.4, though.
+> This bundle is *not* developed in sync with Symfony's repository. The sf2.4 branch seems to work reasonably well with Symfony 2.4, though.
+If you are using Symfony 3.1 or higher, the master branch is for you, but it's still undergoing development for the moment.
 
 Documentation
 -------------
