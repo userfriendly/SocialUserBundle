@@ -8,19 +8,19 @@ parameters:
 services:
 
     uf.security.email_change_request_manager:
-        class: %uf_security_storage_agnostic_object_manager_class%
+        class: "%uf_security_storage_agnostic_object_manager_class%"
         arguments:
-            - '@doctrine.orm.entity_manager'
-            - %uf_security_email_change_request_class%
+            - "@doctrine.orm.entity_manager"
+            - "%uf_security_email_change_request_class%"
 
     uf.security.oauth_identity_manager:
-        class: %uf_security_storage_agnostic_object_manager_class%
+        class: "%uf_security_storage_agnostic_object_manager_class%"
         arguments:
-            - '@doctrine.orm.entity_manager'
-            - %uf_security_oauth_identity_class%
+            - "@doctrine.orm.entity_manager"
+            - "%uf_security_oauth_identity_class%"
 
     uf.security.oauth_user_provider:
-        class: %uf_security_oauth_user_provider_class%
+        class: "%uf_security_oauth_user_provider_class%"
         arguments:
-            - '@fos_user.user_manager'
-            - '@uf.security.oauth_identity_manager'
+            - "@fos_user.user_manager"
+            - "@uf.security.oauth_identity_manager"
