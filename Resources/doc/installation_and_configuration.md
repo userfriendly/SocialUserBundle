@@ -171,7 +171,7 @@ security:
                 default_target_path: /
                 ## Tell your firewall which provider will manage users for the OAuth login:
                 oauth_user_provider:
-                    service: uf.security.oauth_user_provider
+                    service: userfriendly_social_user.oauth_user_provider
             logout:
                 path: /logout
                 target: /

@@ -4,15 +4,14 @@ namespace Userfriendly\Bundle\SocialUserBundle\Twig\Extension;
 
 use Twig_Extension;
 use Twig_SimpleFunction;
-use Userfriendly\Bundle\SocialUserBundle\Model\StorageAgnosticObjectManager;
 
 class SocialUserExtension extends Twig_Extension
 {
-    protected $identityManager;
+    protected $userIdentityClass;
 
-    public function __construct( StorageAgnosticObjectManager $identityManager )
+    public function __construct( $userIdentityClass )
     {
-        $this->identityManager = $identityManager;
+        $this->userIdentityClass = $userIdentityClass;
     }
 
     public function getName()
@@ -29,7 +28,8 @@ class SocialUserExtension extends Twig_Extension
 
     public function getIdentitiesFor( $user, $asStrings = false )
     {
-        $identities = $this->identityManager->findBy( array( 'user' => $user ));
+        $identityRepo = $this->om->getRepository( $this->userIdentityClass );
+        $identities = $identityRepo->findBy( array( 'user' => $user ));
         if ( $asStrings )
         {
             $strings = array();

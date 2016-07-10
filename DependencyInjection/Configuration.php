@@ -57,7 +57,9 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode( 'firewall_name' )->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode( 'user_class' )->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode( 'group_class' )->end()
+                ->scalarNode( 'user_identity_class' )->defaultNull()->end()
+                ->scalarNode( 'group_class' )->defaultNull()->end()
+                ->scalarNode( 'model_manager_name' )->defaultNull()->end()
                 ->scalarNode( 'mailsubject_emailchange' )->end()
                 ->scalarNode( 'mailsubject_accountdetails' )->end()
             ->end();

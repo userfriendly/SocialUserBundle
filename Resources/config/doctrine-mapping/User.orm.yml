@@ -1,4 +1,4 @@
-Userfriendly\Bundle\SocialUserBundle\Entity\User:
+Userfriendly\Bundle\SocialUserBundle\Model\User:
     type: mappedSuperclass
     fields:
         usernameSlug:

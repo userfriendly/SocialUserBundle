@@ -5,7 +5,7 @@ namespace Userfriendly\Bundle\SocialUserBundle\Model;
 /**
  * Storage agnostic user identity object
  */
-abstract class UserIdentity
+class UserIdentity
 {
     const TYPE_GOOGLE   = "google";
     const TYPE_FACEBOOK = "facebook";

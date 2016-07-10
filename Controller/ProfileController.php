@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Userfriendly\Bundle\SocialUserBundle\Model\UserEmailChangeRequest;
 
 class ProfileController extends Controller
 {
@@ -40,8 +41,8 @@ class ProfileController extends Controller
         $message .= ' Check your inbox for the confirmation email.';
         if ( $request->isMethod( 'post' ))
         {
-            $em = $this->getDoctrine()->getEntityManager();
-            $repo = $em->getRepository( 'UserfriendlySocialUserBundle:User' );
+            $om = $this->get( 'userfriendly_social_user.object_manager' );
+            $repo = $om->getRepository( 'UserfriendlySocialUserBundle:User' );
             $user = $repo->findOneByUsernameSlug( $request->get( 'username_slug' ));
             if ( false /* $user is allowed request? */ )
             {
@@ -54,19 +55,17 @@ class ProfileController extends Controller
                 $canonicalEmail = $this->get( 'fos_user.util.email_canonicalizer' )->canonicalize( $email );
                 if ( $repo->findOneByEmailCanonical( $canonicalEmail ))
                 {
-                    $message  = 'Email address already in use.';
-                    $message .= ' Please contact an administrator for more information.';
+                    $message  = "Can't use this mail address.";
                 }
                 else
                 {
-                    $emailChangeRequestManager = $this->get( 'uf.security.email_change_request_manager' );
-                    $changeRequest = $emailChangeRequestManager->create();
+                    $changeRequest = new UserEmailChangeRequest();
                     $changeRequest->setUser( $user );
                     $token = substr( $this->get( 'fos_user.util.token_generator' )->generateToken(), 0, 12 );
                     $changeRequest->setConfirmationToken( $token );
                     $changeRequest->setEmail( $email );
-                    $em->persist( $changeRequest );
-                    $em->flush();
+                    $om->persist( $changeRequest );
+                    $om->flush();
                     // send confirmation email to new address
                     $domain = $request->getHost();
                     $url = 'http://' . $domain . str_replace(
@@ -135,7 +134,7 @@ class ProfileController extends Controller
             'cssClass' => 'success',
             'text' => 'username is available',
         );
-        $user = $this->get( 'uf.security.oauth_user_provider' )
+        $user = $this->get( 'userfriendly_social_user.oauth_user_provider' )
                      ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         $currentUser = $this->get( 'security.context' )->getToken()->getUser();
         if ( $currentUser->getId() != $user->getId() && !$this->get( 'security.context' )->isGranted( 'ROLE_ADMIN' ))
@@ -162,7 +161,7 @@ class ProfileController extends Controller
 
     private function showAndEdit( Request $request, $action )
     {
-        $user = $this->get( 'uf.security.oauth_user_provider' )
+        $user = $this->get( 'userfriendly_social_user.oauth_user_provider' )
                      ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         if ( $user )
         {
@@ -185,7 +184,7 @@ class ProfileController extends Controller
     private function saveUserDataAndGuardAgainstNonPermittedEdit( Request $request, $key )
     {
         // Get the User object in question
-        $user = $this->get( 'uf.security.oauth_user_provider' )
+        $user = $this->get( 'userfriendly_social_user.oauth_user_provider' )
                      ->findOneByUsernameSlug( $request->get( 'username_slug' ));
         if ( !$user ) throw new NotFoundHttpException();
         // Make sure the current user has editing rights

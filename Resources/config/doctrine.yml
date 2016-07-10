@@ -1,0 +1,17 @@
+
+parameters:
+    userfriendly_social_user.oauth_user_provider.class: Userfriendly\Bundle\SocialUserBundle\OAuth\UserProvider
+    userfriendly_social_user.object_manager.class: Doctrine\Common\Persistence\ObjectManager
+
+services:
+    userfriendly_social_user.oauth_user_provider:
+        class: "%userfriendly_social_user.oauth_user_provider.class%"
+        arguments:
+            - "@fos_user.user_manager"
+            - "@userfriendly_social_user.object_manager"
+            - "%userfriendly_social_user.model.user.class%"
+            - "%userfriendly_social_user.model.user_identity.class%"
+    userfriendly_social_user.object_manager:
+        class: "%userfriendly_social_user.object_manager.class%"
+        arguments:
+            - "%userfriendly_social_user.model_manager_name%"

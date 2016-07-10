@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Storage agnostic user object
  */
-abstract class User extends BaseUser implements UserInterface
+class User extends BaseUser implements UserInterface
 {
     /**
      * The purpose of this unique placeholder element is its use in a column

@@ -1,31 +1,23 @@
-Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity:
+Userfriendly\Bundle\SocialUserBundle\Model\UserEmailChangeRequest:
     type: entity
-    table: user__identity
+    table: user__emailchangerequest
     id:
         id:
             type: integer
             generator:
                 strategy: AUTO
     fields:
-        type:
-            type: string
-            length: 32
-        identifier:
-            type: string
-            length: 255
-        accessToken:
-            column: access_token
-            type: string
-            length: 255
-            nullable: true
-        name:
-            type: string
-            length: 255
-            nullable: true
         email:
             type: string
             length: 255
+        confirmationToken:
+            column: confirmation_token
+            type: string
+            length: 255
+            unique: true
             nullable: true
+        confirmed:
+            type: boolean
         updatedAt:
             column: updated_at
             type: datetime
@@ -45,4 +37,3 @@ Userfriendly\Bundle\SocialUserBundle\Entity\UserIdentity:
                 name: user_id
                 referencedColumnName: id
             cascade: ["persist"]
-            fetch: EAGER

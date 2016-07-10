@@ -6,7 +6,7 @@ services:
     uf.twig.social_user_extension:
         class: '%uf_twig_social_user_extension_class%'
         arguments:
-            - '@uf.security.oauth_identity_manager'
+            - "%userfriendly_social_user.model.user_identity.class%"
         tags:
             - { name: twig.extension }
     uf.security.role_refresh_listener:

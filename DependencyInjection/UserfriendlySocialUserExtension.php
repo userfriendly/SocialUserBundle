@@ -2,14 +2,75 @@
 
 namespace Userfriendly\Bundle\SocialUserBundle\DependencyInjection;
 
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class UserfriendlySocialUserExtension extends Extension implements PrependExtensionInterface
 {
+    private static $doctrineDrivers = array(
+        'orm' => array(
+            'registry' => 'doctrine',
+            'tag' => 'doctrine.event_subscriber',
+        ),
+        'mongodb' => array(
+            'registry' => 'doctrine_mongodb',
+            'tag' => 'doctrine_mongodb.odm.event_subscriber',
+        ),
+    );
+
+    public function load( array $configs, ContainerBuilder $container )
+    {
+        // Configuration
+        $processor = new Processor();
+        $configuration = new Configuration();
+        $config = $processor->processConfiguration( $configuration, $configs );
+
+        // Set some parameters
+        $container->setParameter( 'uf_sub_mail_subject_emailchange', isset( $config['mailsubject_emailchange'] )
+                ?: 'Change of email address requested' );
+        $container->setParameter( 'uf_sub_mail_subject_accountdetails', isset( $config['mailsubject_accountdetails'] )
+                ?: 'Your account details' );
+        $container->setParameter( 'uf_firewall_name', isset( $config['firewall_name'] )
+                ?: 'main' );
+
+        // Services and mappings
+        $loader = new YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ));
+        $loader->load( 'services.yml' );
+        if ( isset( self::$doctrineDrivers[$config['db_driver']] ))
+        {
+            $loader->load( 'doctrine.yml' );
+            $container->setAlias( 'userfriendly_social_user.doctrine_registry', new Alias( self::$doctrineDrivers[$config['db_driver']]['registry'], false ));
+            $container->setParameter( $this->getAlias() . '.backend_type_' . $config['db_driver'], true );
+            $definition = $container->getDefinition( 'userfriendly_social_user.object_manager' );
+            $definition->setFactory( array( new Reference( 'userfriendly_social_user.doctrine_registry' ), 'getManager' ));
+        }
+        else
+        {
+            throw new InvalidConfigurationException( 'Configured storage is not implemented.' );
+        }
+
+        $this->remapParametersNamespaces( $config, $container, array(
+                '' => array(
+                        'db_driver' => 'userfriendly_social_user.storage',
+                        'model_manager_name' => 'userfriendly_social_user.model_manager_name',
+                        'user_class' => 'userfriendly_social_user.model.user.class',
+                        'user_identity_class' => 'userfriendly_social_user.model.user_identity.class',
+                ),
+        ));
+
+        if ( !$container->getParameter( "userfriendly_social_user.model.user_identity.class" ))
+        {
+            $container->setParameter( "userfriendly_social_user.model.user_identity.class", "Userfriendly\Bundle\SocialUserBundle\Model\UserIdentity" );
+        }
+    }
+
     public function prepend( ContainerBuilder $container )
     {
         ////////////////////////////////////////////////////////
@@ -67,7 +128,7 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         /////////////////////////////////////////////////////////////
         // configure connect provider
         $connectConfig = array(
-            'account_connector' => 'uf.security.oauth_user_provider',
+            'account_connector' => 'userfriendly_social_user.oauth_user_provider',
         );
         $container->prependExtensionConfig( 'hwi_oauth', array( 'connect' => $connectConfig ));
         // configure HTTP client
@@ -103,21 +164,50 @@ class UserfriendlySocialUserExtension extends Extension implements PrependExtens
         );
     }
 
-    public function load( array $configs, ContainerBuilder $container )
+    /*
+     *
+     */
+    protected function remapParametersNamespaces( array $config, ContainerBuilder $container, array $namespaces )
     {
-        // Configuration
-        $configuration = new Configuration();
-        $config = $this->processConfiguration( $configuration, $configs );
-        // Services
-        $loader = new YamlFileLoader( $container, new FileLocator( __DIR__ . '/../Resources/config' ));
-        $loader->load( 'services.yml' );
-        $loader->load( sprintf('%s.yml', $config['db_driver'] ));
-        // Set parameters
-        $container->setParameter( 'uf_sub_mail_subject_emailchange', isset( $config['mailsubject_emailchange'] )
-                ?: 'Change of email address requested' );
-        $container->setParameter( 'uf_sub_mail_subject_accountdetails', isset( $config['mailsubject_accountdetails'] )
-                ?: 'Your account details' );
-        $container->setParameter( 'uf_firewall_name', isset( $config['firewall_name'] )
-                ?: 'main' );
+        foreach ( $namespaces as $ns => $map )
+        {
+            if ( $ns )
+            {
+                if ( !array_key_exists( $ns, $config ))
+                {
+                    continue;
+                }
+                $namespaceConfig = $config[$ns];
+            }
+            else
+            {
+                $namespaceConfig = $config;
+            }
+            if ( is_array( $map ))
+            {
+                $this->remapParameters( $namespaceConfig, $container, $map );
+            }
+            else
+            {
+                foreach ( $namespaceConfig as $name => $value )
+                {
+                    $container->setParameter( sprintf( $map, $name ), $value );
+                }
+            }
+        }
+    }
+
+    /*
+     *
+     */
+    protected function remapParameters( array $config, ContainerBuilder $container, array $map )
+    {
+        foreach ( $map as $name => $paramName )
+        {
+            if ( array_key_exists( $name, $config ))
+            {
+                $container->setParameter( $paramName, $config[$name] );
+            }
+        }
     }
 }

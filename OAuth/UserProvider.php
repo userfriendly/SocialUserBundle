@@ -9,31 +9,36 @@ use Userfriendly\Bundle\SocialUserBundle\Event\UserAccountMergedEvent;
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-use Symfony\Component\EventDispatcher\ContainerAwareEventDispatcher;
+use Doctrine\Common\Persistence\ObjectManager;
 
 class UserProvider implements OAuthAwareUserProviderInterface
 {
     /** @var UserManagerInterface */
     protected $userManager;
 
-    /** @var StorageAgnosticObjectManager */
-    protected $identityManager;
+    /** @var ObjectManager */
+    protected $om;
 
-    /** @var ContainerAwareEventDispatcher */
-    protected $eventDispatcher;
+    /** @var string */
+    protected $userClass;
+
+    /** @var string */
+    protected $userIdentityClass;
 
     /**
      * Constructor
      *
-     * @param UserManagerInterface           $userManager      FOSUB User manager
-     * @param StorageAgnosticObjectManager   $identityManager  Identity manager
-     * @param ContainerAwareEventDispatcher  $eventDispatcher  Event dispatcher
+     * @param UserManagerInterface  $userManager        FOSUB User manager
+     * @param ObjectManager         $om                 Generic object manager
+     * @param string                $userClass          User object class
+     * @param string                $userIdentityClass  User identity object class
      */
-    public function __construct( UserManagerInterface $userManager, StorageAgnosticObjectManager $identityManager /*, ContainerAwareEventDispatcher $eventDispatcher */ )
+    public function __construct( UserManagerInterface $userManager, ObjectManager $om, $userClass, $userIdentityClass )
     {
         $this->userManager = $userManager;
-        $this->identityManager = $identityManager;
-//        $this->eventDispatcher = $eventDispatcher;
+        $this->om = $om;
+        $this->userClass = $userClass;
+        $this->userIdentityClass = $userIdentityClass;
     }
 
     /**
@@ -51,7 +56,7 @@ class UserProvider implements OAuthAwareUserProviderInterface
 //            $this->eventDispatcher->dispatch( UserAccountMergedEvent::ID, $event );
             $existingIdentity->setUser( $user );
             $existingIdentity->setAccessToken( $this->getAccessToken( $response ));
-            $this->identityManager->update( $existingIdentity );
+            $this->om->flush();
         }
         else
         {
@@ -92,7 +97,8 @@ class UserProvider implements OAuthAwareUserProviderInterface
      */
     protected function getExistingIdentity( UserResponseInterface $response )
     {
-        return $this->identityManager->findOneBy( array(
+        $repo = $this->om->getRepository( $this->userIdentityClass );   // wrong class
+        return $repo->findOneBy( array(
             'identifier' => $response->getUsername(),
             'type' => $response->getResourceOwner()->getName(),
         ));
@@ -125,14 +131,15 @@ class UserProvider implements OAuthAwareUserProviderInterface
      */
     protected function createIdentity( User $user, UserResponseInterface $response )
     {
-        $identity = $this->identityManager->create();
+        $identity = new $this->userIdentityClass;
         $identity->setAccessToken( $this->getAccessToken( $response ));
         $identity->setIdentifier( $response->getUsername() );
         $identity->setType( $response->getResourceOwner()->getName() );
         $identity->setUser( $user );
         $identity->setName( $this->getRealName( $response ));
         $identity->setEmail( $this->getEmail( $response ));
-        $this->identityManager->update( $identity );
+        $this->om->persist( $identity );
+        $this->om->flush();
         return $identity;
     }
 

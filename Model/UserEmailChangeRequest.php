@@ -5,7 +5,7 @@ namespace Userfriendly\Bundle\SocialUserBundle\Model;
 /**
  * Storage agnostic user email change request object
  */
-abstract class UserEmailChangeRequest
+class UserEmailChangeRequest
 {
     /**
      *
@@ -13,7 +13,7 @@ abstract class UserEmailChangeRequest
     protected $id;
 
     /**
-     * @var \Userfriendly\Bundle\SocialUserBundle\Model\User
+     * @var \Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
      */
     protected $user;
 
@@ -173,10 +173,10 @@ abstract class UserEmailChangeRequest
     /**
      * Set user
      *
-     * @param \Userfriendly\Bundle\SocialUserBundle\Model\User $user
+     * @param \Userfriendly\Bundle\SocialUserBundle\Model\UserInterface $user
      * @return \Userfriendly\Bundle\SocialUserBundle\Model\UserEmailChangeRequest
      */
-    public function setUser( User $user = null )
+    public function setUser( UserInterface $user = null )
     {
         $this->user = $user;
         return $this;
@@ -185,7 +185,7 @@ abstract class UserEmailChangeRequest
     /**
      * Get user
      *
-     * @return \Userfriendly\Bundle\SocialUserBundle\Model\User
+     * @return \Userfriendly\Bundle\SocialUserBundle\Model\UserInterface
      */
     public function getUser()
     {
